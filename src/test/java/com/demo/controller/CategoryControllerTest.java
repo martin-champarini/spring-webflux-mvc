@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 public class CategoryControllerTest {
 
@@ -74,5 +75,57 @@ public class CategoryControllerTest {
                 .expectStatus()
                 .isCreated();
 
+    }
+
+    @Test
+    public void update() {
+        BDDMockito.given(categoryRepository.save(any(Category.class)))
+                .willReturn(Mono.just(Category.builder().build()));
+        Mono<Category> categoryMono = Mono.just(Category.builder().description("somecat").build());
+
+        webTestClient.put()
+                .uri("/api/v1/categories/asdasd")
+                .body(categoryMono, Category.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
+    }
+
+    @Test
+    public void patchWithChange() {
+        BDDMockito.given(categoryRepository.findById(anyString())).willReturn(
+                Mono.just(Category.builder().build())
+        );
+
+        BDDMockito.given(categoryRepository.save(any(Category.class)))
+                .willReturn(Mono.just(Category.builder().build()));
+        Mono<Category> categoryMono = Mono.just(Category.builder().description("somecat").build());
+
+        webTestClient.patch()
+                .uri("/api/v1/categories/asdasd")
+                .body(categoryMono, Category.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        Mockito.verify(categoryRepository).save(any());
+    }
+
+    @Test
+    public void patchWithNoChanges() {
+        BDDMockito.given(categoryRepository.findById(anyString())).willReturn(
+                Mono.just(Category.builder().build())
+        );
+
+        BDDMockito.given(categoryRepository.save(any(Category.class)))
+                .willReturn(Mono.just(Category.builder().build()));
+        Mono<Category> categoryMono = Mono.just(Category.builder().build());
+
+        webTestClient.patch()
+                .uri("/api/v1/categories/asdasd")
+                .body(categoryMono, Category.class)
+                .exchange()
+                .expectStatus()
+                .isOk();
     }
 }
