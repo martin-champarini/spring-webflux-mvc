@@ -127,5 +127,8 @@ public class CategoryControllerTest {
                 .exchange()
                 .expectStatus()
                 .isOk();
+
+        Mockito.verify(categoryRepository, Mockito.never()).save(any());
+
     }
 }
