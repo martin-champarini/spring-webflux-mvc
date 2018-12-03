@@ -1,1 +1,1 @@
-# spring-webflux-mvc
+[![CircleCI](https://circleci.com/gh/martin-champarini/spring-webflux-mvc/tree/master.svg?style=svg)](https://circleci.com/gh/martin-champarini/spring-webflux-mvc/tree/master)
